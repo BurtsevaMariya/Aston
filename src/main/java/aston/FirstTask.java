@@ -10,7 +10,7 @@ public class FirstTask {
         compareNumbers(2, 2);
         System.out.println(isSumInRange(20, 1));
         isNumberPositiveOrNegative(-1);
-        System.out.println(isNumberPositiveOrNegative(-1));
+        System.out.println(isNumberPositiveOrNegative(0));
         printTextConsole("Печать", 3);
         System.out.println(isYearLeap(40));
         invertArray();
@@ -68,7 +68,7 @@ public class FirstTask {
     }
 
     public static boolean isNumberPositiveOrNegative(int number) {
-        return number >= 0;
+        return number < 0;
     }
 
     public static void printTextConsole(String text, int times) {
@@ -78,15 +78,13 @@ public class FirstTask {
     }
 
     public static boolean isYearLeap(int year) {
-        if(year % 4 == 0 && year % 400 == 0){
-            return true;
-        }else return year % 100 == 0;
+        return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
     }
 
-    public static void invertArray (){
+    public static void invertArray() {
         int[] array = {1, 1, 0, 0, 1, 0, 1, 1, 0, 0};
-        for (int i = 0; i < array.length; i++){
-            if(array[i] == 0){
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == 0) {
                 array[i] = 1;
             } else if (array[i] == 1) {
                 array[i] = 0;
@@ -96,10 +94,10 @@ public class FirstTask {
         System.out.println();
     }
 
-    public static void loopThroughArray(){
-        int[] array = new int[101];
-        for(int i = 0; i < 101; i++){
-            array[i] = i;
+    public static void loopThroughArray() {
+        int[] array = new int[100];
+        for (int i = 0; i < 100; i++) {
+            array[i] = i + 1;
             System.out.println("index array[" + i + "] = " + array[i]);
         }
     }
