@@ -71,7 +71,7 @@ public class MtsTest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         WebElement buttonSubmit = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//form[@id='pay-connection']")));
         WebElement inputPhone = driver.findElement(By.xpath("//input[@id='connection-phone']"));
-        inputPhone.sendKeys("88005553535");
+        inputPhone.sendKeys("2977777777");
         WebElement inputSum = driver.findElement(By.xpath("//input[@id='connection-sum']"));
         inputSum.sendKeys("200");
         buttonSubmit.click();
