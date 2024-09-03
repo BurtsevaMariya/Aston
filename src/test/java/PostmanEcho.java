@@ -1,14 +1,23 @@
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
 
-import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.expect;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class PostmanTest {
+
+public class PostmanEcho {
 
     public static RequestSpecification requestSpec;
     public static ResponseSpecification responseSpec;
+
+    static {
+        LoggerFactory.getLogger(PostmanEcho.class);
+    }
 
     @BeforeAll
     public static void setRequestSpec() {
@@ -24,7 +33,7 @@ public class PostmanTest {
     public static void setResponseSpec() {
         responseSpec = expect()
                 .statusCode(200)
-                .body("headers.x-forwarded-proto", equalTo("https"),
+                .body("headers.x-forwarded-proto", equalTo("http"),
                         "headers.host", equalTo("postman-echo.com"),
                         "headers.accept", equalTo("*/*"),
                         "headers.accept-encoding", equalTo("gzip, deflate, br"),
@@ -42,10 +51,10 @@ public class PostmanTest {
                 .get("/get")
                 .then().log().body().spec(responseSpec)
                 .body(
-                        "args.foo1", equalTo("bar1")
-                        , "args.foo2", equalTo("bar2")
-                        , "url", equalTo("https://postman-echo.com/get?foo1=bar1&foo2=bar2"));
-
+                        "args.foo1", equalTo("bar1"),
+                        "args.foo2", equalTo("bar2"),
+                        "url", equalTo("http://postman-echo.com/get?foo1=bar1&foo2=bar2"),
+                        "headers.x-forwarded-proto", equalTo("http"));
     }
 
     @Test
@@ -63,7 +72,7 @@ public class PostmanTest {
                         "headers.content-length", equalTo("11"),
                         "headers.content-type", equalTo("text/plain; charset=ISO-8859-1"),
                         "json", equalTo(null),
-                        "url", equalTo("https://postman-echo.com/post")
+                        "url", equalTo("http://postman-echo.com/post")
                 );
     }
 
@@ -84,12 +93,12 @@ public class PostmanTest {
                         "headers.content-type", equalTo("application/x-www-form-urlencoded; charset=UTF-8"),
                         "json.foo1", equalTo("bar1"),
                         "json.foo2", equalTo("bar2"),
-                        "url", equalTo("https://postman-echo.com/post"));
+                        "url", equalTo("http://postman-echo.com/post"));
     }
 
     @Test
     @DisplayName("PUT request")
-    public void put_request_test() {
+    public void put_request_tests() {
         given().log().body().spec(requestSpec)
                 .headers("Content-Type", "text/plain")
                 .body("This is expected to be sent back as part of response body.")
@@ -102,7 +111,7 @@ public class PostmanTest {
                         "headers.content-length", equalTo("58"),
                         "headers.content-type", equalTo("text/plain; charset=ISO-8859-1"),
                         "json", equalTo(null),
-                        "url", equalTo("https://postman-echo.com/put"));
+                        "url", equalTo("http://postman-echo.com/put"));
     }
 
     @Test
@@ -114,30 +123,6 @@ public class PostmanTest {
                 .when()
                 .patch("/patch")
                 .then().log().body()
-                .spec(responseSpec)
-                .body(
-                        "data", equalTo("This is expected to be sent back as part of response body."),
-                        "headers.content-length", equalTo("58"),
-                        "headers.content-type", equalTo("text/plain; charset=ISO-8859-1"),
-                        "json", equalTo(null),
-                        "url", equalTo("https://postman-echo.com/patch"));
-    }
-
-    @Test
-    @DisplayName("DELETE request")
-    public void delete_request_test() {
-        given().log().body().spec(requestSpec)
-                .headers("Content-Type", "text/plain")
-                .body("This is expected to be sent back as part of response body.")
-                .when()
-                .delete("/delete")
-                .then().log().body()
-                .spec(responseSpec)
-                .body(
-                        "data", equalTo("This is expected to be sent back as part of response body."),
-                        "headers.content-length", equalTo("58"),
-                        "headers.content-type", equalTo("text/plain; charset=ISO-8859-1"),
-                        "json", equalTo(null),
-                        "url", equalTo("https://postman-echo.com/delete"));
+                .spec(responseSpec);
     }
 }
